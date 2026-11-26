@@ -5,6 +5,9 @@ import { PhoneLayout } from './components/PhoneLayout';
 import { Splash } from './pages/Splash';
 import { LoginCliente } from './pages/LoginCliente';
 import { LoginBarbeiro } from './pages/LoginBarbeiro';
+import { AgendaCliente } from './pages/AgendaCliente';
+import { SelecaoServico } from './pages/SelecaoServico';
+import { MeusAgendamentos } from './pages/MeusAgendamentos';
 import { ConfirmarAgendamento } from './pages/ConfirmarAgendamento';
 import type { Role } from './types';
 
@@ -36,6 +39,32 @@ export function App() {
             <Route path="/login/cliente" element={<LoginCliente />} />
             <Route path="/login/barbeiro" element={<LoginBarbeiro />} />
             <Route path="/confirmar" element={<ConfirmarAgendamento />} />
+
+            {/* Fluxo Cliente */}
+            <Route
+              path="/cliente/agenda"
+              element={
+                <RotaProtegida rolesPermitidos={['CLIENTE']}>
+                  <AgendaCliente />
+                </RotaProtegida>
+              }
+            />
+            <Route
+              path="/cliente/agendar"
+              element={
+                <RotaProtegida rolesPermitidos={['CLIENTE']}>
+                  <SelecaoServico />
+                </RotaProtegida>
+              }
+            />
+            <Route
+              path="/cliente/meus-agendamentos"
+              element={
+                <RotaProtegida rolesPermitidos={['CLIENTE']}>
+                  <MeusAgendamentos />
+                </RotaProtegida>
+              }
+            />
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
