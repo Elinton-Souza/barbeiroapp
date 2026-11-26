@@ -109,18 +109,25 @@ async function dispararNotificacaoCriacao(
     });
   }
 
-  await enviarEmail(
+  // O envio de e-mail é só um aviso complementar (o agendamento e as
+  // notificações dentro do app já foram criados e salvos acima). Por isso
+  // NÃO esperamos (await) o e-mail terminar antes de responder — em
+  // produção o SMTP do Gmail pode ficar lento ou até ser bloqueado pelo
+  // provedor de hospedagem, e isso não pode travar a criação do
+  // agendamento nem deixar o cliente esperando (ou pior, achando que deu
+  // erro quando na verdade o agendamento já foi criado com sucesso).
+  enviarEmail(
     cliente.email,
     "Confirme seu agendamento — Lizandro Barbeiro",
     `<p>Olá, ${cliente.nome}!</p><p>Seu agendamento (${resumo}) foi registrado.</p><p>Clique no link abaixo pra confirmar:</p><p><a href="${link}">${link}</a></p>`,
-  );
+  ).catch((err) => console.error("Falha ao enviar e-mail de confirmação pro cliente:", err));
 
   if (barbeiro) {
-    await enviarEmail(
+    enviarEmail(
       barbeiro.email,
       "Novo agendamento — Lizandro Barbeiro",
       `<p>Novo agendamento de ${cliente.nome} (${resumo}), aguardando confirmação do cliente.</p>`,
-    );
+    ).catch((err) => console.error("Falha ao enviar e-mail de aviso pro barbeiro:", err));
   }
 }
 
