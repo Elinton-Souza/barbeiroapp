@@ -237,6 +237,11 @@ export const AgendaCliente: React.FC = () => {
           <span style={{ fontWeight: 700, fontSize: '14px', textTransform: 'capitalize', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <Calendar size={15} />
             {nomeMes}
+            {carregandoDias && (
+              <span style={{ fontSize: '11px', fontWeight: 400, color: '#9A9DA3', textTransform: 'none' }}>
+                (carregando...)
+              </span>
+            )}
           </span>
 
           <button
