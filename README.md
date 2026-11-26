@@ -2,6 +2,13 @@
 
 Sistema de agendamento para barbearia, desenvolvido como Trabalho #3 da disciplina de Programação Full Stack (curso de ADS) — tema "Uso das IAs no desenvolvimento". O código foi construído com apoio de duas IAs: o **backend** com o Claude e o **frontend** com o Gemini, coordenados por um documento de contexto compartilhado (`lizandro-barbeiro-contexto.md`). Todo o processo de desenvolvimento está documentado na pasta [`evidencias/`](./evidencias), em ordem cronológica, e o histórico completo de prompts está em [`lizandro-barbeiro-registro-prompts.md`](./lizandro-barbeiro-registro-prompts.md).
 
+## Demo online
+
+- **Site (frontend)**: https://barbeiroapp-sigma.vercel.app
+- **API (backend)**: https://lizandro-barbeiro-backend.onrender.com
+
+Frontend hospedado no Vercel, backend no Render (plano gratuito) e banco PostgreSQL no Neon. Por ser plano gratuito, o backend "dorme" após ~15 minutos sem uso — a primeira requisição depois disso pode levar de 30 a 50 segundos pra responder.
+
 ## O que o sistema faz
 
 Três perfis de acesso:
@@ -19,7 +26,7 @@ Regras de negócio importantes:
 
 ## Stack
 
-**Backend** (`lizandro-barbeiro-backend/`): Node.js + Express + TypeScript, Prisma + PostgreSQL, JWT para autenticação, bcrypt para senha, Zod para validação, Nodemailer (Gmail) para e-mail real de confirmação, Google Identity Services para login social.
+**Backend** (`lizandro-barbeiro-backend/`): Node.js + Express + TypeScript, Prisma + PostgreSQL, JWT para autenticação, bcrypt para senha, Zod para validação, Brevo (API HTTP) para e-mail real de confirmação, Google Identity Services para login social.
 
 **Frontend** (`lizandro-barbeiro-front/`): React + Vite + TypeScript, React Router, lucide-react para ícones. Layout em formato de celular (phone frame), com sessão salva em `sessionStorage` (não `localStorage`) propositalmente — isso permite abrir várias abas/janelas logadas como perfis diferentes (cliente, barbeiro, admin) ao mesmo tempo, sem uma sessão sobrescrever a outra.
 
@@ -43,7 +50,7 @@ Variáveis de ambiente (`.env`):
 | `JWT_SECRET` | segredo para assinar os tokens de login |
 | `ADMIN_EMAIL` / `ADMIN_SENHA` | credenciais do admin criado pelo seed |
 | `GOOGLE_CLIENT_ID` | client ID do Google Identity Services |
-| `EMAIL_USER` / `EMAIL_SENHA_APP` | conta Gmail (senha de app) usada para enviar os e-mails de confirmação |
+| `BREVO_API_KEY` / `BREVO_SENDER_EMAIL` | chave de API e remetente verificado no Brevo, usados para enviar os e-mails de confirmação (via API HTTP — evita o bloqueio de SMTP de saída que hospedagens gratuitas como o Render costumam aplicar) |
 | `FRONTEND_URL` | usada para montar o link de confirmação enviado por e-mail |
 | `PORT` | porta do servidor (padrão 3333) |
 
