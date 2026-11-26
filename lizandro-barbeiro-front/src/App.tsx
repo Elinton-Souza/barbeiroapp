@@ -8,6 +8,7 @@ import { LoginBarbeiro } from './pages/LoginBarbeiro';
 import { AgendaCliente } from './pages/AgendaCliente';
 import { SelecaoServico } from './pages/SelecaoServico';
 import { MeusAgendamentos } from './pages/MeusAgendamentos';
+import { SemanaBarbeiro } from './pages/SemanaBarbeiro';
 import { ConfirmarAgendamento } from './pages/ConfirmarAgendamento';
 import type { Role } from './types';
 
@@ -62,6 +63,16 @@ export function App() {
               element={
                 <RotaProtegida rolesPermitidos={['CLIENTE']}>
                   <MeusAgendamentos />
+                </RotaProtegida>
+              }
+            />
+
+            {/* Fluxo Barbeiro */}
+            <Route
+              path="/barbeiro/semana"
+              element={
+                <RotaProtegida rolesPermitidos={['BARBEIRO']}>
+                  <SemanaBarbeiro />
                 </RotaProtegida>
               }
             />
