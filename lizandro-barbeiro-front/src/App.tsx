@@ -5,6 +5,7 @@ import { PhoneLayout } from './components/PhoneLayout';
 import { Splash } from './pages/Splash';
 import { LoginCliente } from './pages/LoginCliente';
 import { LoginBarbeiro } from './pages/LoginBarbeiro';
+import { PainelAdmin } from './pages/PainelAdmin';
 import { AgendaCliente } from './pages/AgendaCliente';
 import { SelecaoServico } from './pages/SelecaoServico';
 import { MeusAgendamentos } from './pages/MeusAgendamentos';
@@ -40,6 +41,16 @@ export function App() {
             <Route path="/login/cliente" element={<LoginCliente />} />
             <Route path="/login/barbeiro" element={<LoginBarbeiro />} />
             <Route path="/confirmar" element={<ConfirmarAgendamento />} />
+
+            {/* Fluxo Admin */}
+            <Route
+              path="/admin"
+              element={
+                <RotaProtegida rolesPermitidos={['ADMIN']}>
+                  <PainelAdmin />
+                </RotaProtegida>
+              }
+            />
 
             {/* Fluxo Cliente */}
             <Route
