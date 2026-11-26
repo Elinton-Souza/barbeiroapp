@@ -1,0 +1,204 @@
+:root {
+  --bg-page: #070708;
+  --bg-app: #0E0E0F;
+  --bg-surface: #2B2D31;
+  --border-color: #4A4D52;
+  --text-primary: #E4E4E6;
+  --text-secondary: #9A9DA3;
+
+  /* Cores saturadas exclusivas para status da agenda */
+  --status-livre: #22C55E;
+  --status-ocupado: #EF4444;
+  --status-espera: #EAB308;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Container externo no Desktop */
+.desktop-stage {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: radial-gradient(circle at center, #18181B 0%, #070708 100%);
+}
+
+/* Moldura do Celular — mantém a proporção de smartphone (390x844), mas
+   escala com o tamanho da janela: encolhe em telas/janelas menores e cresce
+   em telas maiores, sempre dentro de um tamanho mínimo e máximo legível. */
+.phone-frame {
+  height: clamp(560px, 90vh, 900px);
+  aspect-ratio: 390 / 844;
+  width: auto;
+  max-width: 94vw;
+  background-color: var(--bg-app);
+  border: 3px solid var(--border-color);
+  border-radius: 42px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), inset 0 0 0 2px #1a1a1d;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Entalhe superior sutil (notch) apenas no desktop */
+.phone-notch {
+  width: 130px;
+  height: 22px;
+  background-color: #070708;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  margin: 0 auto;
+  flex-shrink: 0;
+  z-index: 50;
+}
+
+.phone-screen {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Scrollbar discreta */
+.phone-screen::-webkit-scrollbar {
+  width: 4px;
+}
+.phone-screen::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+/* Em telas reais de celular, remove a moldura e ocupa 100% */
+@media (max-width: 480px) {
+  .desktop-stage {
+    padding: 0;
+    background: var(--bg-app);
+  }
+  .phone-frame {
+    width: 100vw;
+    height: 100dvh;
+    max-height: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .phone-notch {
+    display: none;
+  }
+}
+
+/* Utilitários de UI Monocromática */
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--text-primary);
+  color: var(--bg-app);
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #36393f;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 14px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+}
+
+.input-field:focus {
+  border-color: var(--text-primary);
+}
+
+.input-label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.input-password-wrapper {
+  position: relative;
+}
+
+.input-password-wrapper .input-field {
+  padding-right: 42px;
+}
+
+.input-password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+}
+
+@keyframes pulseText {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+
+.pulse-hint {
+  animation: pulseText 2.2s infinite ease-in-out;
+}

@@ -1,0 +1,9 @@
+{
+  "python-envs.pythonProjects": [
+    {
+      "path": "lizandro-barbeiro-backend/src/controllers",
+      "envManager": "ms-python.python:venv",
+      "packageManager": "ms-python.python:pip"
+    }
+  ]
+}

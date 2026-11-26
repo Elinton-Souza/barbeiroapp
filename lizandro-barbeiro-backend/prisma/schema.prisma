@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider        = "postgresql"
+  url             = env("DATABASE_URL")
+  directUrl       = env("DIRECT_URL")
+}
+
+
+enum RoleUsuario {
+  CLIENTE
+  BARBEIRO
+  ADMIN
+}
+
+enum TipoServico {
+  CABELO
+  BARBA
+  CABELO_BARBA
+  CRIANCA
+}
+
+enum StatusAgendamento {
+  PENDENTE_CONFIRMACAO
+  CONFIRMADO
+  CANCELADO
+}
+
+enum TipoNotificacao {
+    AGENDAMENTO_CRIADO
+    AGENDAMENTO_CONFIRMADO
+    AGENDAMENTO_CANCELADO
+}
+
+model Usuario {
+  id              String        @id @default(uuid())
+  nome            String        
+  nomeBarbearia   String?        
+  email           String        @unique
+  senha           String?       
+  googleId        String?       @unique
+  telefone        String?       
+  cpf             String?       
+  role            RoleUsuario @default(CLIENTE)
+  criadoEm        DateTime      @default(now())
+
+  agendamentos  Agendamento[]
+  notificacoes  Notificacao[]
+}
+
+model ConfiguracaoDiaSemana {
+  id                String    @id @default(uuid())
+  diaSemana         Int       @unique // 0 = domingo ... 6 = sábado
+  trabalhaPadrao    Boolean   
+}
+
+model DiaAgenda {
+  id          String      @id @default(uuid())
+  data        DateTime    @unique @db.Date
+  trabalha    Boolean     
+}
+
+model Agendamento {
+  id                  String              @id @default(uuid())
+  clienteId           String              
+  cliente             Usuario             @relation(fields: [clienteId], references: [id])
+  status              StatusAgendamento   @default(PENDENTE_CONFIRMACAO)
+  criadoPorBarbeiro   Boolean             @default(false)
+  tokenConfirmacao    String              @unique @default(uuid())
+  criadoEm            DateTime            @default(now())
+  confirmadoEm        DateTime?
+
+  itens           AgendamentoItem[]
+  notificacoes    Notificacao[]
+}
+
+model AgendamentoItem {
+  id                String        @id @default(uuid())
+  agendamentoId     String        
+  agendamento       Agendamento   @relation(fields: [agendamentoId], references: [id])
+  tipoServico       TipoServico   
+  nomeAtendido      String        
+  dataHoraInicio    DateTime      
+  duracaoMinutos    Int             
+}
+
+model Notificacao {
+  id                  String            @id @default(uuid())
+  usuarioId           String            
+  usuario             Usuario           @relation(fields: [usuarioId], references: [id])
+  agendamentoId       String?           
+  agendamento         Agendamento?      @relation(fields: [agendamentoId], references: [id])
+  tipo                TipoNotificacao   
+  mensagem            String            
+  requerConfirmacao   Boolean           @default(false)
+  confirmada          Boolean           @default(false)
+  criadaEm            DateTime          @default(now())
+}
